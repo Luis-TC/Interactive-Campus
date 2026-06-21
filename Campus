@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Digital Campus Portal – Northfield University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --sidebar-bg: #111827;
+    --sidebar-w: 210px;
+    --right-w: 250px;
+    --accent: #2563eb;
+    --accent-light: #dbeafe;
+    --success: #0f6e56;
+    --success-light: #dcfce7;
+    --text: #111827;
+    --text-muted: #6b7280;
+    --text-light: #9ca3af;
+    --border: #e5e7eb;
+    --bg: #f9fafb;
+    --card-bg: #ffffff;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+    background: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+    overflow-y: auto;
+  }
+  .logo {
+    padding: 18px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 18px; flex-shrink: 0;
+  }
+  .logo-text { line-height: 1.25; }
+  .logo-text strong { display: block; font-size: 13px; font-weight: 600; color: #fff; }
+  .logo-text span { font-size: 11px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: .05em; }
+
+  .nav { flex: 1; padding: 10px 0; }
+  .nav-label {
+    padding: 14px 16px 4px;
+    font-size: 10px; text-transform: uppercase; letter-spacing: .08em;
+    color: rgba(255,255,255,0.3); font-weight: 500;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 16px;
+    font-size: 13px; color: rgba(255,255,255,0.6);
+    cursor: pointer; border-left: 3px solid transparent;
+    transition: background .12s, color .12s;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-item.active {
+    background: rgba(255,255,255,0.1);
+    color: #fff; border-left-color: var(--accent);
+  }
+  .nav-item i { font-size: 16px; width: 18px; flex-shrink: 0; }
+
+  /* ── MAIN WRAPPER ── */
+  .main-wrap {
+    margin-left: var(--sidebar-w);
+    margin-right: var(--right-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .search {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 6px 12px; width: 270px;
+    color: var(--text-muted); font-size: 13px;
+  }
+  .search i { font-size: 15px; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .icon-btn {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 1px solid var(--border); background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); cursor: pointer; font-size: 16px;
+  }
+  .lang {
+    font-size: 12px; font-weight: 500; padding: 5px 10px;
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: #fff; color: var(--text-muted); cursor: pointer;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; height: 290px; overflow: hidden;
+    background: #0d1f12;
+    display: flex; align-items: flex-end;
+  }
+  .hero-img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: 0.55;
+  }
+  /* SVG campus illustration as bg */
+  .hero-svg-bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.25) 55%, transparent 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 28px 28px; flex: 1;
+  }
+  .hero-content h1 {
+    font-size: 28px; font-weight: 600; color: #fff;
+    margin-bottom: 8px; line-height: 1.2;
+  }
+  .hero-content p {
+    font-size: 13px; color: rgba(255,255,255,0.75);
+    margin-bottom: 18px; max-width: 320px; line-height: 1.55;
+  }
+  .hero-actions { display: flex; gap: 10px; }
+  .btn-blue {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--accent); color: #fff;
+    padding: 9px 18px; border-radius: var(--radius-sm);
+    font-size: 13px; font-weight: 500; cursor: pointer; border: none;
+    white-space: nowrap;
+  }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.15); color: #fff;
+    padding: 9px 18px; border-radius: var(--radius-sm);
+    font-size: 13px; font-weight: 500; cursor: pointer; border: none;
+    white-space: nowrap;
+  }
+  .hero-info-card {
+    position: absolute; right: 24px; bottom: 24px; z-index: 2;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius); padding: 14px 18px; color: #fff;
+    min-width: 180px;
+  }
+  .hero-info-card .bldg-name {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 14px; font-weight: 600; margin-bottom: 8px;
+  }
+  .hero-info-card p { font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+  .hero-info-card a {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px; color: #60a5fa; margin-top: 8px;
+    text-decoration: none; cursor: pointer;
+  }
+
+  /* ── CONTENT AREA ── */
+  .content { padding: 24px; flex: 1; }
+
+  .section-title {
+    font-size: 15px; font-weight: 600; color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  /* CATEGORIES */
+  .cat-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+    margin-bottom: 24px;
+  }
+  .cat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden; cursor: pointer;
+    transition: box-shadow .15s, border-color .15s;
+  }
+  .cat-card:hover { border-color: #93c5fd; box-shadow: 0 2px 12px rgba(37,99,235,.08); }
+  .cat-thumb {
+    height: 90px; display: flex; align-items: center; justify-content: center;
+    font-size: 32px; color: rgba(255,255,255,0.5);
+  }
+  .c1 { background: #1a3a2a; }
+  .c2 { background: #172040; }
+  .c3 { background: #2a2d18; }
+  .c4 { background: #3a1e18; }
+  .c5 { background: #1a2540; }
+  .cat-body { padding: 12px; }
+  .cat-icon {
+    width: 26px; height: 26px; border-radius: 6px;
+    background: var(--bg); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--text-muted); margin-bottom: 7px;
+  }
+  .cat-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .cat-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px; }
+  .cat-link { font-size: 13px; color: var(--text-light); }
+
+  /* WORKFLOW */
+  .workflow-box {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px 20px; margin-bottom: 20px;
+  }
+  .box-label {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--text-muted); margin-bottom: 14px;
+  }
+  .wf-steps { display: flex; align-items: flex-start; gap: 0; }
+  .wf-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
+  .wf-num { font-size: 10px; color: var(--text-light); align-self: flex-start; padding-left: 2px; }
+  .wf-icon {
+    width: 38px; height: 38px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: #fff;
+  }
+  .wf-label { font-size: 10px; color: var(--text-muted); text-align: center; line-height: 1.4; max-width: 70px; }
+  .wf-arrow { color: var(--text-light); font-size: 14px; padding: 0 2px; margin-top: 10px; }
+
+  /* BOTTOM ROW */
+  .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .panel {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px;
+  }
+  .panel-alt { background: #f0fdf4; border-color: #bbf7d0; }
+
+  .tools-row { display: flex; flex-wrap: wrap; gap: 16px; }
+  .tool {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 5px; min-width: 52px;
+  }
+  .tool-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; color: #fff;
+  }
+  .tool-name { font-size: 11px; color: var(--text); font-weight: 500; text-align: center; }
+  .tool-tag {
+    font-size: 9px; background: var(--bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 3px; color: var(--text-muted);
+  }
+
+  .check-list { display: flex; flex-direction: column; gap: 7px; }
+  .check-item { display: flex; align-items: center; gap: 9px; }
+  .chk {
+    width: 18px; height: 18px; border-radius: 4px;
+    background: var(--success);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: #fff; flex-shrink: 0;
+  }
+  .chk-text { font-size: 12px; color: var(--text); }
+
+  /* ── RIGHT SIDEBAR ── */
+  .right-sidebar {
+    width: var(--right-w);
+    min-width: var(--right-w);
+    background: #fff;
+    border-left: 1px solid var(--border);
+    padding: 18px 14px;
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    overflow-y: auto;
+  }
+  .rs-title { font-size: 14px; font-weight: 600; margin-bottom: 14px; }
+  .viewer-card {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; margin-bottom: 12px;
+  }
+  .viewer-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 10px; border-bottom: 1px solid var(--border);
+  }
+  .viewer-head-name { font-size: 12px; font-weight: 500; }
+  .badge-free {
+    font-size: 10px; font-weight: 600;
+    background: var(--success-light); color: #166534;
+    padding: 2px 8px; border-radius: 4px;
+  }
+  .badge-inc {
+    font-size: 10px; font-weight: 600;
+    background: var(--accent-light); color: #1e40af;
+    padding: 2px 8px; border-radius: 4px;
+  }
+  .viewer-preview {
+    height: 96px; display: flex; align-items: center; justify-content: center;
+    font-size: 28px; color: rgba(255,255,255,0.35);
+  }
+  .viewer-caption { padding: 6px 10px; font-size: 11px; color: var(--text-muted); }
+
+  /* responsive */
+  @media (max-width: 1100px) {
+    .right-sidebar { display: none; }
+    .main-wrap { margin-right: 0; }
+    .cat-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 720px) {
+    .sidebar { transform: translateX(-100%); }
+    .main-wrap { margin-left: 0; }
+    .cat-grid { grid-template-columns: repeat(2, 1fr); }
+    .bottom-row { grid-template-columns: 1fr; }
+    .wf-steps { flex-wrap: wrap; justify-content: center; }
+    .wf-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── LEFT SIDEBAR ── -->
+<nav class="sidebar" aria-label="Navegación principal">
+  <div class="logo">
+    <div class="logo-icon"><i class="ti ti-building" aria-hidden="true"></i></div>
+    <div class="logo-text">
+      <strong>Northfield</strong>
+      <span>University</span>
+    </div>
+  </div>
+  <div class="nav">
+    <a class="nav-item active" href="#"><i class="ti ti-home" aria-hidden="true"></i> Home</a>
+    <a class="nav-item" href="#"><i class="ti ti-map" aria-hidden="true"></i> Interactive campus</a>
+    <a class="nav-item" href="#"><i class="ti ti-building-skyscraper" aria-hidden="true"></i> Buildings</a>
+    <a class="nav-item" href="#"><i class="ti ti-tree" aria-hidden="true"></i> Landscape</a>
+    <a class="nav-item" href="#"><i class="ti ti-3d-cube-sphere" aria-hidden="true"></i> Reality capture</a>
+    <a class="nav-item" href="#"><i class="ti ti-360" aria-hidden="true"></i> Virtual tours</a>
+    <a class="nav-item" href="#"><i class="ti ti-file-description" aria-hidden="true"></i> Documents</a>
+    <a class="nav-item" href="#"><i class="ti ti-info-circle" aria-hidden="true"></i> About project</a>
+    <div class="nav-label">Quick access</div>
+    <a class="nav-item" href="#"><i class="ti ti-layout-2" aria-hidden="true"></i> Floor plans (PDF)</a>
+    <a class="nav-item" href="#"><i class="ti ti-clipboard-list" aria-hidden="true"></i> Project sheets</a>
+    <a class="nav-item" href="#"><i class="ti ti-git-merge" aria-hidden="true"></i> Model coordination</a>
+    <a class="nav-item" href="#"><i class="ti ti-headset" aria-hidden="true"></i> Contact team</a>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<div class="main-wrap">
+
+  <!-- topbar -->
+  <header class="topbar">
+    <div class="search" role="search">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <span style="color:#9ca3af;">Search buildings, places…</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn" title="Modo claro/oscuro"><i class="ti ti-sun" aria-hidden="true"></i></div>
+      <div class="icon-btn" title="Ayuda"><i class="ti ti-question-mark" aria-hidden="true"></i></div>
+      <div class="lang">EN ↓</div>
+    </div>
+  </header>
+
+  <!-- hero -->
+  <section class="hero" aria-label="Banner principal">
+    <!-- Illustrated campus background -->
+    <svg class="hero-svg-bg" viewBox="0 0 900 290" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+      <rect width="900" height="290" fill="#0d1f12"/>
+      <!-- Sky gradient -->
+      <rect width="900" height="130" fill="#1a3525" opacity=".7"/>
+      <!-- Ground -->
+      <rect y="200" width="900" height="90" fill="#0a1a0a" opacity=".8"/>
+      <!-- Trees -->
+      <ellipse cx="60" cy="185" rx="28" ry="22" fill="#1a4a25"/>
+      <ellipse cx="820" cy="175" rx="24" ry="20" fill="#1a4a25"/>
+      <ellipse cx="760" cy="190" rx="18" ry="15" fill="#15401f"/>
+      <ellipse cx="110" cy="192" rx="16" ry="13" fill="#1d5229"/>
+      <!-- Main building -->
+      <rect x="280" y="80" width="340" height="175" rx="4" fill="#243b28"/>
+      <rect x="295" y="65" width="310" height="30" rx="3" fill="#2d4a32"/>
+      <!-- Windows main building -->
+      <rect x="310" y="100" width="30" height="40" rx="2" fill="#0d2016" opacity=".8"/>
+      <rect x="360" y="100" width="30" height="40" rx="2" fill="#0d2016" opacity=".8"/>
+      <rect x="410" y="100" width="30" height="40" rx="2" fill="#0d2016" opacity=".8"/>
+      <rect x="460" y="100" width="30" height="40" rx="2" fill="#0d2016" opacity=".8"/>
+      <rect x="510" y="100" width="30" height="40" rx="2" fill="#0d2016" opacity=".8"/>
+      <rect x="560" y="100" width="30" height="40" rx="2" fill="#0d2016" opacity=".8"/>
+      <!-- Entrance columns -->
+      <rect x="400" y="160" width="100" height="95" fill="#1e3524"/>
+      <rect x="408" y="155" width="12" height="100" rx="2" fill="#2a4830"/>
+      <rect x="430" y="155" width="12" height="100" rx="2" fill="#2a4830"/>
+      <rect x="452" y="155" width="12" height="100" rx="2" fill="#2a4830"/>
+      <rect x="474" y="155" width="12" height="100" rx="2" fill="#2a4830"/>
+      <!-- Side buildings -->
+      <rect x="120" y="110" width="140" height="145" rx="3" fill="#1e3020"/>
+      <rect x="640" y="95" width="150" height="160" rx="3" fill="#1e3020"/>
+      <!-- Path -->
+      <ellipse cx="450" cy="270" rx="120" ry="18" fill="#14280f" opacity=".7"/>
+      <!-- Roof details -->
+      <rect x="280" y="60" width="340" height="8" rx="2" fill="#3a5e40"/>
+    </svg>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Digital Campus Portal</h1>
+      <p>Explore the as-built model and landscape of Northfield University.</p>
+      <div class="hero-actions">
+        <button class="btn-blue"><i class="ti ti-3d-cube-sphere" aria-hidden="true"></i> Explore campus</button>
+        <button class="btn-ghost"><i class="ti ti-player-play" aria-hidden="true"></i> Watch intro</button>
+      </div>
+    </div>
+    <div class="hero-info-card">
+      <div class="bldg-name"><i class="ti ti-building" style="font-size:14px;opacity:.8;" aria-hidden="true"></i> Central Library</div>
+      <p>Year built: 2012<br>Area: 128,000 SF</p>
+      <a href="#">View building <i class="ti ti-arrow-right" style="font-size:11px;" aria-hidden="true"></i></a>
+    </div>
+  </section>
+
+  <!-- main content -->
+  <main class="content">
+
+    <!-- Categories -->
+    <h2 class="section-title">Explore by category</h2>
+    <div class="cat-grid">
+      <div class="cat-card">
+        <div class="cat-thumb c1"><i class="ti ti-map" aria-hidden="true"></i></div>
+        <div class="cat-body">
+          <div class="cat-icon"><i class="ti ti-3d-cube-sphere" aria-hidden="true"></i></div>
+          <div class="cat-name">Interactive campus</div>
+          <div class="cat-desc">Navigate the 3D model of the entire campus and key features.</div>
+          <div class="cat-link"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-thumb c2"><i class="ti ti-building" aria-hidden="true"></i></div>
+        <div class="cat-body">
+          <div class="cat-icon"><i class="ti ti-building-skyscraper" aria-hidden="true"></i></div>
+          <div class="cat-name">Buildings</div>
+          <div class="cat-desc">Details, specifications, floor plans and more.</div>
+          <div class="cat-link"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-thumb c3"><i class="ti ti-tree" aria-hidden="true"></i></div>
+        <div class="cat-body">
+          <div class="cat-icon"><i class="ti ti-leaf" aria-hidden="true"></i></div>
+          <div class="cat-name">Landscape</div>
+          <div class="cat-desc">Planting, hardscape, and outdoor spaces design.</div>
+          <div class="cat-link"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-thumb c4"><i class="ti ti-radar" aria-hidden="true"></i></div>
+        <div class="cat-body">
+          <div class="cat-icon"><i class="ti ti-3d-rotate" aria-hidden="true"></i></div>
+          <div class="cat-name">Reality capture</div>
+          <div class="cat-desc">Point cloud scans compared with the as-built BIM model.</div>
+          <div class="cat-link"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-thumb c5"><i class="ti ti-headset" aria-hidden="true"></i></div>
+        <div class="cat-body">
+          <div class="cat-icon"><i class="ti ti-360" aria-hidden="true"></i></div>
+          <div class="cat-name">Virtual tours</div>
+          <div class="cat-desc">Curated tours around campus in 3D key spaces.</div>
+          <div class="cat-link"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Workflow -->
+    <div class="workflow-box">
+      <div class="box-label">Flujo de trabajo</div>
+      <div class="wf-steps">
+        <div class="wf-step">
+          <div class="wf-num">1.</div>
+          <div class="wf-icon" style="background:#374151;"><i class="ti ti-camera" aria-hidden="true"></i></div>
+          <div class="wf-label">Escaneo láser del campus</div>
+        </div>
+        <div class="wf-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        <div class="wf-step">
+          <div class="wf-num">2.</div>
+          <div class="wf-icon" style="background:#1d4ed8;"><i class="ti ti-refresh" aria-hidden="true"></i></div>
+          <div class="wf-label">Limpieza y registro en ReCap</div>
+        </div>
+        <div class="wf-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        <div class="wf-step">
+          <div class="wf-num">3.</div>
+          <div class="wf-icon" style="background:#2563eb;"><i class="ti ti-cube" aria-hidden="true"></i></div>
+          <div class="wf-label">Modelado as-built en Revit</div>
+        </div>
+        <div class="wf-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        <div class="wf-step">
+          <div class="wf-num">4.</div>
+          <div class="wf-icon" style="background:#111827;"><i class="ti ti-eye" aria-hidden="true"></i></div>
+          <div class="wf-label">Render y panoramas en Twinmotion</div>
+        </div>
+        <div class="wf-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        <div class="wf-step">
+          <div class="wf-num">5.</div>
+          <div class="wf-icon" style="background:#0f6e56;"><i class="ti ti-upload" aria-hidden="true"></i></div>
+          <div class="wf-label">Modelos 3D a Sketchfab</div>
+        </div>
+        <div class="wf-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        <div class="wf-step">
+          <div class="wf-num">6.</div>
+          <div class="wf-icon" style="background:#4b5563;"><i class="ti ti-world" aria-hidden="true"></i></div>
+          <div class="wf-label">Sitio web en Google Sites / Notion</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom row -->
+    <div class="bottom-row">
+      <div class="panel">
+        <div class="box-label">Herramientas utilizadas (gratuitas o incluidas)</div>
+        <div class="tools-row">
+          <div class="tool">
+            <div class="tool-icon" style="background:#1d4ed8;"><i class="ti ti-refresh" aria-hidden="true"></i></div>
+            <div class="tool-name">ReCap</div>
+            <div class="tool-tag">Incluido</div>
+          </div>
+          <div class="tool">
+            <div class="tool-icon" style="background:#2563eb;"><i class="ti ti-cube" aria-hidden="true"></i></div>
+            <div class="tool-name">Revit</div>
+            <div class="tool-tag">Incluido</div>
+          </div>
+          <div class="tool">
+            <div class="tool-icon" style="background:#111827;"><i class="ti ti-player-play" aria-hidden="true"></i></div>
+            <div class="tool-name">Twinmotion</div>
+            <div class="tool-tag">Gratuito</div>
+          </div>
+          <div class="tool">
+            <div class="tool-icon" style="background:#0f6e56;"><i class="ti ti-world" aria-hidden="true"></i></div>
+            <div class="tool-name">Sketchfab</div>
+            <div class="tool-tag">Gratuito</div>
+          </div>
+          <div class="tool">
+            <div class="tool-icon" style="background:#0284c7;"><i class="ti ti-brand-google" aria-hidden="true"></i></div>
+            <div class="tool-name">Google Sites</div>
+            <div class="tool-tag">Gratuito</div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-alt">
+        <div class="box-label" style="color:#166534;">Insumos para el portal</div>
+        <div class="check-list">
+          <div class="check-item">
+            <div class="chk"><i class="ti ti-check" aria-hidden="true"></i></div>
+            <div class="chk-text">Enlaces embebidos (Sketchfab, ACC Viewer)</div>
+          </div>
+          <div class="check-item">
+            <div class="chk"><i class="ti ti-check" aria-hidden="true"></i></div>
+            <div class="chk-text">Imágenes y renders (Twinmotion)</div>
+          </div>
+          <div class="check-item">
+            <div class="chk"><i class="ti ti-check" aria-hidden="true"></i></div>
+            <div class="chk-text">Panoramas 360° (Twinmotion)</div>
+          </div>
+          <div class="check-item">
+            <div class="chk"><i class="ti ti-check" aria-hidden="true"></i></div>
+            <div class="chk-text">Videos / recorridos (Twinmotion)</div>
+          </div>
+          <div class="check-item">
+            <div class="chk"><i class="ti ti-check" aria-hidden="true"></i></div>
+            <div class="chk-text">Documentos (PDF, planos, reportes)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── RIGHT SIDEBAR ── -->
+<aside class="right-sidebar" aria-label="Visores interactivos">
+  <div class="rs-title">Interactive viewers</div>
+
+  <div class="viewer-card">
+    <div class="viewer-head">
+      <div class="viewer-head-name">Campus model (Sketchfab)</div>
+      <div class="badge-free">FREE</div>
+    </div>
+    <div class="viewer-preview" style="background:#1a2e1a;"><i class="ti ti-3d-cube-sphere" aria-hidden="true"></i></div>
+    <div class="viewer-caption">Embebido desde Sketchfab (modelo 3D ligero)</div>
+  </div>
+
+  <div class="viewer-card">
+    <div class="viewer-head">
+      <div class="viewer-head-name">As-built BIM (ACC viewer)</div>
+      <div class="badge-inc">INCLUIDO</div>
+    </div>
+    <div class="viewer-preview" style="background:#111827;"><i class="ti ti-building" aria-hidden="true"></i></div>
+    <div class="viewer-caption">Embebido desde Autodesk Construction Cloud</div>
+  </div>
+
+  <div class="viewer-card">
+    <div class="viewer-head">
+      <div class="viewer-head-name">Point cloud (Sketchfab)</div>
+      <div class="badge-free">FREE</div>
+    </div>
+    <div class="viewer-preview" style="background:#060606;"><i class="ti ti-radar" aria-hidden="true"></i></div>
+    <div class="viewer-caption">Nube de puntos embebida desde Sketchfab</div>
+  </div>
+
+  <div class="viewer-card">
+    <div class="viewer-head">
+      <div class="viewer-head-name">Vista responsive</div>
+    </div>
+    <div class="viewer-preview" style="background:#f3f4f6;">
+      <div style="display:flex;gap:6px;align-items:center;">
+        <div style="width:48px;height:34px;background:#d1d5db;border-radius:3px;"></div>
+        <div style="width:22px;height:40px;background:#d1d5db;border-radius:3px;"></div>
+        <div style="width:30px;height:36px;background:#d1d5db;border-radius:3px;"></div>
+      </div>
+    </div>
+    <div class="viewer-caption">Adaptado a móvil, tablet y escritorio</div>
+  </div>
+</aside>
+
+</body>
+</html>
